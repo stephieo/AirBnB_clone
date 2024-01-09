@@ -47,4 +47,3 @@ class BaseModel:
         dict_copy['created_at'] = datetime.strftime(self.created_at, "%Y-%m-%dT%H:%M:%S.%f")
         dict_copy['updated_at'] = datetime.isoformat(self.updated_at)
         return dict_copy
-
