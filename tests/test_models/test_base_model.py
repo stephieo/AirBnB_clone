@@ -5,11 +5,11 @@ from unittest.mock import patch
 from models.base_model import BaseModel
 from io import StringIO
 import sys
+from datetime import timedelta
 
 class TestBaseModel(unittest.TestCase):
-    """ tests the basic functionalities of the `BaseModel` class"""
-
-
+    """ basic type-checking tests of attibutes in  the `BaseModel` class"""
+    
     def test_types(self):
         """checks that the type of the object attributes are str and datetime.datetime"""
         mod1 = BaseModel()
@@ -22,6 +22,27 @@ class TestBaseModel(unittest.TestCase):
         mod2 = BaseModel()
         mod3 = BaseModel()
         self.assertNotEqual(mod2.id, mod3.id)
+
+class TestBaseModelInstantiation(unittest.TestCase):
+    """checks that the instantiation of `BaseModel` objects works correctly in various scenarios"""
+      
+    def test_init_no_args(self):
+        """instantiation test with no arguments"""
+        t1 = BaseModel()
+        self.assertEqual(isinstance(t1, BaseModel), True)
+        self.assertTrue(hasattr(t1,"created_at"))
+        self.assertTrue(hasattr(t1,"updated_at"))
+        self.assertTrue(hasattr(t1,"id"))
+        self.assertAlmostEqual(t1.created_at, t1.updated_at, delta=timedelta(seconds=1))
+
+    def test_init_with_args(self):
+        pass
+    def test_init_many_args(self):
+        pass
+    def test_init_with_kwargs(self):
+        pass
+    def test_init_kwargs_and_args(self):
+        pass
 
 class TestBaseModelMethods(unittest.TestCase):
     """ tests the methods of the `BaseModel` classs"""
@@ -46,7 +67,11 @@ class TestBaseModelMethods(unittest.TestCase):
         mod2.number = 54
         mod_dict_str = mod2.to_dict()
         self.assertEqual(type(mod_dict_str), dict)
-        self.assertEqual(mod_dict_str, mod2.to_dict)
+        self.assertEqual(mod_dict_str, mod2.to_dict())
+
+    def test_save(self):
+        """checks that the """
+
 
 if "__name__" == "__main__":
     unittest.main()
