@@ -20,7 +20,7 @@ class FileStorage:
             obj (dict): dictionary representing an instance
         """
         key = obj.__class__.__name__ + "." + obj.id
-        self.__objects[key] = obj
+        FileStorage.__objects[key] = obj
 
     def save(self) -> None:
         """serializes '__objects' to the JSON file (path: __file_path)"""
