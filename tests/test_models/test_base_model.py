@@ -6,6 +6,7 @@ from models.base_model import BaseModel
 from io import StringIO
 import sys
 from datetime import timedelta
+from datetime import datetime
 
 class TestBaseModel(unittest.TestCase):
     """ basic type-checking tests of attibutes in  the `BaseModel` class"""
@@ -36,13 +37,30 @@ class TestBaseModelInstantiation(unittest.TestCase):
         self.assertAlmostEqual(t1.created_at, t1.updated_at, delta=timedelta(seconds=1))
 
     def test_init_with_args(self):
-        pass
+        """tests instantiation of object with arguments from dictionary"""
+        dict1 = {'id': '56d43177-cc5f-4d6c-a0c1-e167f8c27337',
+                 'created_at': '2017-09-28T21:03:54.052298',
+                 '__class__': 'BaseModel',
+                 'my_number': 89, 'updated_at': '2017-09-28T21:03:54.052302',
+                 'name': 'My_First_Model'}
+        mod3 = BaseModel(**dict1)
+        self.assertTrue(hasattr(mod3, "created_at"))
+        self.assertEqual(type(mod3.created_at), datetime)
+        self.assertEqual(type(mod3.updated_at), datetime)
+        self.assertEqual(mod3.id, "56d43177-cc5f-4d6c-a0c1-e167f8c27337")
+        
     def test_init_many_args(self):
-        pass
+            pass
+
     def test_init_with_kwargs(self):
-        pass
-    def test_init_kwargs_and_args(self):
-        pass
+        """tests instantiation of object with direct kwargs"""
+        t2 = BaseModel(id="78393",
+                       created_at="2023-12-14T17:30:54.052298",
+                       updated_at="2024-01-02T11:03:54.062721")
+        self.assertEqual(type(t2.id), str)
+        self.assertEqual(type(t2.created_at), datetime)
+
+    
 
 class TestBaseModelMethods(unittest.TestCase):
     """ tests the methods of the `BaseModel` classs"""
@@ -68,9 +86,21 @@ class TestBaseModelMethods(unittest.TestCase):
         mod_dict_str = mod2.to_dict()
         self.assertEqual(type(mod_dict_str), dict)
         self.assertEqual(mod_dict_str, mod2.to_dict())
+        self.assertEqual(type(mod_dict_str['created_at']), str)
+        self.assertEqual(type(mod_dict_str['updated_at']), str)
 
     def test_save(self):
-        """checks that the """
+        """checks that the updated_at attribute is updated with save() """
+        t3 = BaseModel()
+        # print(f"created at: {t3.created_at}")
+        # print(f"update 0: {t3.updated_at}")
+        self.assertAlmostEqual(t3.created_at, t3.updated_at, delta=timedelta(seconds=1))
+        t3.save()
+        # print(f"update 1: {t3.updated_at}")
+        self.assertNotAlmostEqual(t3.created_at, t3.updated_at, delta=timedelta(microseconds=100))
+        t3.save()
+        # print(f"update 2: {t3.updated_at}")
+        self.assertNotAlmostEqual(t3.created_at, t3.updated_at, delta=timedelta(microseconds=1000))
 
 
 if "__name__" == "__main__":
