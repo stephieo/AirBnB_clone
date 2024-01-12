@@ -41,6 +41,18 @@ class TestFileStorageMethods(unittest.TestCase):
         with open("file.json", "r", encoding="utf-8") as file:
             recent_save = json.load(file)
             self.assertIn("BaseModel" + "." + m2.id , recent_save)
+        
     def test_reload(self):
         """checks deserialization process of objects"""
-        pass
+        m3 = BaseModel()
+        a3 = Amenity()
+        u3 = User()
+        models.storage.save()
+        self.assertIn(u3.__class__.__name__ + "." + u3.id, models.storage._FileStorage__objects)
+        self.assertIn(m3.__class__.__name__ + "." + m3.id, models.storage._FileStorage__objects)
+        self.assertIn(a3.__class__.__name__ + "." + a3.id, models.storage.all().keys())
+        models.storage.reload()
+        self.assertIn(u3.__class__.__name__ + "." + u3.id, models.storage._FileStorage__objects)
+        self.assertIn(m3.__class__.__name__ + "." + m3.id, models.storage._FileStorage__objects)
+        self.assertIn(a3.__class__.__name__ + "." + a3.id, models.storage.all().keys())
+        
