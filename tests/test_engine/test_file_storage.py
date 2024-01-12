@@ -65,3 +65,6 @@ class TestFileStorageMethods(unittest.TestCase):
                       models.storage._FileStorage__objects)
         self.assertIn(a3.__class__.__name__ + "." + a3.id,
                       models.storage.all().keys())
+
+if "__name__" == "__main__":
+    unittest.main()

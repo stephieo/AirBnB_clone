@@ -8,11 +8,13 @@ import sys
 from datetime import timedelta
 from datetime import datetime
 
+
 class TestBaseModel(unittest.TestCase):
     """ basic type-checking tests of attibutes in  the `BaseModel` class"""
-    
+
     def test_types(self):
-        """checks that the type of the object attributes are str and datetime.datetime"""
+        """checks that the type of the object attributes
+        are str and datetime.datetime"""
         mod1 = BaseModel()
         self.assertEqual(type(mod1.id), type(mod1.id))
         self.assertEqual(type(mod1.created_at), type(mod1.created_at))
@@ -24,17 +26,20 @@ class TestBaseModel(unittest.TestCase):
         mod3 = BaseModel()
         self.assertNotEqual(mod2.id, mod3.id)
 
+
 class TestBaseModelInstantiation(unittest.TestCase):
-    """checks that the instantiation of `BaseModel` objects works correctly in various scenarios"""
-      
+    """checks that the instantiation of `BaseModel` objects
+    works correctly in various scenarios"""
+
     def test_init_no_args(self):
         """instantiation test with no arguments"""
         t1 = BaseModel()
         self.assertEqual(isinstance(t1, BaseModel), True)
-        self.assertTrue(hasattr(t1,"created_at"))
-        self.assertTrue(hasattr(t1,"updated_at"))
-        self.assertTrue(hasattr(t1,"id"))
-        self.assertAlmostEqual(t1.created_at, t1.updated_at, delta=timedelta(seconds=1))
+        self.assertTrue(hasattr(t1, "created_at"))
+        self.assertTrue(hasattr(t1, "updated_at"))
+        self.assertTrue(hasattr(t1, "id"))
+        self.assertAlmostEqual(t1.created_at, t1.updated_at,
+                               delta=timedelta(seconds=1))
 
     def test_init_with_args(self):
         """tests instantiation of object with arguments from dictionary"""
@@ -48,9 +53,9 @@ class TestBaseModelInstantiation(unittest.TestCase):
         self.assertEqual(type(mod3.created_at), datetime)
         self.assertEqual(type(mod3.updated_at), datetime)
         self.assertEqual(mod3.id, "56d43177-cc5f-4d6c-a0c1-e167f8c27337")
-        
+
     def test_init_many_args(self):
-            pass
+        pass
 
     def test_init_with_kwargs(self):
         """tests instantiation of object with direct kwargs"""
@@ -60,7 +65,6 @@ class TestBaseModelInstantiation(unittest.TestCase):
         self.assertEqual(type(t2.id), str)
         self.assertEqual(type(t2.created_at), datetime)
 
-    
 
 class TestBaseModelMethods(unittest.TestCase):
     """ tests the methods of the `BaseModel` classs"""
@@ -70,13 +74,12 @@ class TestBaseModelMethods(unittest.TestCase):
         """checks that the output of `str()` matches the requirements"""
         mod1 = BaseModel()
         mod1.name = "first model"
-        mod1.number ="30"
+        mod1.number = "30"
         mod_str = f"[{mod1.__class__.__name__}] ({mod1.id}) {mod1.__dict__}"
         output_of_str = str(mod1)
         print(mod1)
         self.assertEqual(output_of_str, mod_str)
         mock_output.assert_called_once_with(mod1)
-
 
     def test_to_dict(self):
         """ checks that the output of `to_dict()` matches requirements"""
@@ -94,13 +97,16 @@ class TestBaseModelMethods(unittest.TestCase):
         t3 = BaseModel()
         # print(f"created at: {t3.created_at}")
         # print(f"update 0: {t3.updated_at}")
-        self.assertAlmostEqual(t3.created_at, t3.updated_at, delta=timedelta(seconds=1))
+        self.assertAlmostEqual(t3.created_at, t3.updated_at,
+                               delta=timedelta(seconds=1))
         t3.save()
         # print(f"update 1: {t3.updated_at}")
-        self.assertNotAlmostEqual(t3.created_at, t3.updated_at, delta=timedelta(microseconds=10))
+        self.assertNotAlmostEqual(t3.created_at, t3.updated_at,
+                                  delta=timedelta(microseconds=10))
         t3.save()
         # print(f"update 2: {t3.updated_at}")
-        self.assertNotAlmostEqual(t3.created_at, t3.updated_at, delta=timedelta(microseconds=1000))
+        self.assertNotAlmostEqual(t3.created_at, t3.updated_at,
+                                  delta=timedelta(microseconds=1000))
 
 
 if "__name__" == "__main__":
