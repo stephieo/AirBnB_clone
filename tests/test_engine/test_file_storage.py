@@ -13,7 +13,7 @@ from models.user import User
 from models import storage
 
 class TestFileStorage_init(unittest.TestCase):
-    """unittests for FileStorage instantiation"""
+    """unittests for `FileStorage` instantiation"""
 
     def test_init_no_args(self):
         self.assertEqual(FileStorage, type(FileStorage()))
@@ -65,6 +65,7 @@ class TestFileStorage_methods(unittest.TestCase):
             pass
 
     def test_all_type(self):
+        """checks that the correct object record is returned"""
         self.assertEqual(type(FileStorage().all()), dict)
 
     def test_all_with_arg(self):
@@ -75,6 +76,17 @@ class TestFileStorage_methods(unittest.TestCase):
         with self.assertRaises(TypeError):
             FileStorage().new() # storage.new()
 
+    def test_new_individual_instance(self):
+        """checks that new() updates the __objects dictionary with
+        new instances for all classes"""
+
+        f1 = BaseModel()
+        self.assertIn(f1.__class__.__name__ + "." + f1.id, storage._FileStorage__objects)
+        u1 = User()
+        self.assertIn(u1.__class__.__name__ + "." + u1.id, storage._FileStorage__objects)
+        a1 = Amenity()
+        self.assertIn(a1.__class__.__name__ + "." + a1.id, storage.all().keys())
+
     def test_new_with_args(self):
         self.storage.new(self.am)
         self.storage.new(self.bm)
@@ -84,13 +96,13 @@ class TestFileStorage_methods(unittest.TestCase):
         self.storage.new(self.st)
         self.storage.new(self.us)
 
-        self.assertIn("Amenity." + self.am.id, self.storage.all().keys())
-        self.assertIn("BaseModel." + self.bm.id, self.storage.all().keys())
-        self.assertIn("City." + self.ct.id, self.storage.all().keys())
-        self.assertIn("Place." + self.pl.id, self.storage.all().keys())
-        self.assertIn("Review." + self.rv.id, self.storage.all().keys())
-        self.assertIn("State." + self.st.id, storage.all().keys())
-        self.assertIn("User." + self.us.id, self.storage.all().keys())
+        self.assertIn(self.am.__class__.__name__ + "." + self.am.id, self.storage.all().keys())
+        self.assertIn(self.bm.__class__.__name__ + "." + self.bm.id, self.storage.all().keys())
+        self.assertIn(self.ct.__class__.__name__ + "." + self.ct.id, self.storage.all().keys())
+        self.assertIn(self.pl.__class__.__name__ + "." + self.pl.id, self.storage.all().keys())
+        self.assertIn(self.rv.__class__.__name__ + "." + self.rv.id, self.storage.all().keys())
+        self.assertIn(self.st.__class__.__name__ + "." + self.st.id, storage.all().keys())
+        self.assertIn(self.us.__class__.__name__ + "." + self.us.id, self.storage.all().keys())
 
         self.assertIn(self.am, self.storage.all().values())
         self.assertIn(self.bm, self.storage.all().values())
@@ -106,25 +118,24 @@ class TestFileStorage_methods(unittest.TestCase):
 
     def test_save_with_no_args(self):
         self.storage.save()
-        with open("file.json", "r") as r_file:
-            temp_file = r_file.read()
+        with open("file.json", "r", encoding="utf-8") as file:
+            temp_file = json.load(file)
 
-        self.assertIn("Amenity." + self.am.id, temp_file)
-        self.assertIn("BaseModel." + self.bm.id, temp_file)
-        self.assertIn("City." + self.ct.id, temp_file)
-        self.assertIn("Place." + self.pl.id, temp_file)
-        self.assertIn("Review." + self.rv.id, temp_file)
-        self.assertIn("State." + self.st.id, temp_file)
-        self.assertIn("User." + self.us.id, temp_file)
+        self.assertIn(self.am.__class__.__name__ + "." + self.am.id, temp_file)
+        self.assertIn(self.bm.__class__.__name__ + "." + self.bm.id, temp_file)
+        self.assertIn(self.ct.__class__.__name__ + "." + self.ct.id, temp_file)
+        self.assertIn(self.pl.__class__.__name__ + "." + self.pl.id, temp_file)
+        self.assertIn(self.rv.__class__.__name__ + "." + self.rv.id, temp_file)
+        self.assertIn(self.st.__class__.__name__ + "." + self.st.id, temp_file)
+        self.assertIn(self.us.__class__.__name__ + "." + self.us.id, temp_file)
 
-        temp_file_to_dict = json.loads(temp_file)
-        self.assertIn(self.am.to_dict(), temp_file_to_dict.values())
-        self.assertIn(self.bm.to_dict(), temp_file_to_dict.values())
-        self.assertIn(self.ct.to_dict(), temp_file_to_dict.values())
-        self.assertIn(self.pl.to_dict(), temp_file_to_dict.values())
-        self.assertIn(self.rv.to_dict(), temp_file_to_dict.values())
-        self.assertIn(self.st.to_dict(), temp_file_to_dict.values())
-        self.assertIn(self.us.to_dict(), temp_file_to_dict.values())
+        self.assertIn(self.am.to_dict(), temp_file.values())
+        self.assertIn(self.bm.to_dict(), temp_file.values())
+        self.assertIn(self.ct.to_dict(), temp_file.values())
+        self.assertIn(self.pl.to_dict(), temp_file.values())
+        self.assertIn(self.rv.to_dict(), temp_file.values())
+        self.assertIn(self.st.to_dict(), temp_file.values())
+        self.assertIn(self.us.to_dict(), temp_file.values())
 
     def test_reload_with_no_args(self):
         self.storage.reload()
@@ -137,3 +148,7 @@ class TestFileStorage_methods(unittest.TestCase):
         self.assertIn("Review." + self.rv.id, objs)
         self.assertIn("State." + self.st.id, objs)
         self.assertIn("User." + self.us.id, objs)
+
+
+if "__name__" == "__main__":
+    unittest.main()
