@@ -18,8 +18,11 @@ class HBNBCommand(cmd.Cmd):
     prompt = "(hbnb) "
     __classes = ["Amenity", "BaseModel", "City", "Place", "Review",
                  "State", "User"]
-    __cmd_list = ["all", "count"]
     __all_objs = storage.all()
+
+    def onecmd(self, line: str) -> bool:
+        line = self.precmd(line)
+        return super().onecmd(line)
 
     def emptyline(self) -> str:
         return ""
@@ -213,10 +216,6 @@ Usage:  update <class name> <id> <attribute name> "<attribute value>"
                         except NameError:
                             setattr(obj, lines[2], lines[3])
                         eval(lines[0]).save(obj)
-
-    def onecmd(self, line: str) -> bool:
-        line = self.precmd(line)
-        return super().onecmd(line)
 
 
 if __name__ == "__main__":
