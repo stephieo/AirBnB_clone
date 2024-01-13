@@ -46,7 +46,7 @@ class HBNBCommand(cmd.Cmd):
         if (len(lines) == 0):
             print("** class name missing **")
         elif (lines[0] not in self.__classes):
-            """** class doesn't exist **"""
+            print("** class doesn't exist **")
         else:
             obj = eval(lines[0])()
             print(obj.id)
