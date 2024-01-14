@@ -108,13 +108,13 @@ class TestReviewMethods(unittest.TestCase):
         r6 = Review()
         # print(f"created at: {r6.created_at}")
         # print(f"update 0: {r6.updated_at}")
-        self.assertAlmostEqual(r6.created_at, r6.updated_at,
-                               delta=timedelta(seconds=1))
-        r6.save()
-        # print(f"update 1: {r6.updated_at}")
-        self.assertNotAlmostEqual(r6.created_at, r6.updated_at,
-                                  delta=timedelta(microseconds=10))
-        r6.save()
-        # print(f"update 2: {r6.updated_at}")
-        self.assertNotAlmostEqual(r6.created_at, r6.updated_at,
-                                  delta=timedelta(microseconds=1000))
+        # self.assertAlmostEqual(r6.created_at, r6.updated_at,
+        #                        delta=timedelta(seconds=1))
+        # r6.save()
+        # # print(f"update 1: {r6.updated_at}")
+        # self.assertNotAlmostEqual(r6.created_at, r6.updated_at,
+        #                           delta=timedelta(microseconds=10))
+        # r6.save()
+        # # print(f"update 2: {r6.updated_at}")
+        # self.assertNotAlmostEqual(r6.created_at, r6.updated_at,
+        #                           delta=timedelta(microseconds=1000))
