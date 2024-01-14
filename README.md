@@ -1,5 +1,3 @@
-#!/usr/bin/bash
-
 ## AirBnB_clone Project
 
 This project under the guidance of `alxswe` is the first step towards my full web application: the AirBnB clone. This first step is of importance because we'll be using what was built here for other following projects: HTML/CSS templating, database storage, API, front-end integration…
