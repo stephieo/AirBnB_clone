@@ -9,6 +9,7 @@ import sys
 from datetime import timedelta
 from datetime import datetime
 
+
 class TestState(unittest.TestCase):
     """ basic type-checking tests of attibutes in  the `State` class"""
 
@@ -17,12 +18,12 @@ class TestState(unittest.TestCase):
         s0a = State()
         self.assertTrue(type(s0a.name), str)
 
-
     def test_subclass(self):
-           """checks inheritance of `State` objects"""
-           s0 = State()
-           self.assertIsInstance(s0,State)
-           self.assertTrue(issubclass(type(s0),BaseModel))
+        """checks inheritance of `State` objects"""
+        s0 = State()
+        self.assertIsInstance(s0, State)
+        self.assertTrue(issubclass(type(s0), BaseModel))
+
 
 class TestStateInstantiation(unittest.TestCase):
     """checks that the instantiation of `State` objects
@@ -38,7 +39,6 @@ class TestStateInstantiation(unittest.TestCase):
         self.assertAlmostEqual(s1.created_at, s1.updated_at,
                                delta=timedelta(seconds=1))
         self.assertTrue(hasattr(s1, "name"))
-
 
     def test_init_custom_args(self):
         """instantiation test of it's own  arguments"""
@@ -60,12 +60,11 @@ class TestStateInstantiation(unittest.TestCase):
         self.assertIsInstance(s2.updated_at, datetime)
         self.assertEqual(s2.id, "56d43177-cc5f-4d6c-a0c1-e167f8c27337")
 
-
     def test_init_with_kwargs(self):
         """tests instantiation of object with direct kwargs"""
         s3 = State(id="78393",
-                       created_at="2023-12-14T17:30:54.052298",
-                       updated_at="2024-01-02T11:03:54.062721")
+                   created_at="2023-12-14T17:30:54.052298",
+                   updated_at="2024-01-02T11:03:54.062721")
         self.assertEqual(type(s3.id), str)
         self.assertEqual(type(s3.created_at), datetime)
 
@@ -97,18 +96,18 @@ class TestStateMethods(unittest.TestCase):
         self.assertEqual(type(mod_dict_str['created_at']), str)
         self.assertEqual(type(mod_dict_str['updated_at']), str)
 
-    # def test_save(self):
-    #     """checks that the updated_at attribute is updated with save() """
-    #     s6 = State()
-    #     # print(f"created at: {s6.created_at}")
-    #     # print(f"update 0: {s6.updated_at}")
-    #     self.assertAlmostEqual(s6.created_at, s6.updated_at,
-    #                            delta=timedelta(seconds=1))
-    #     s6.save()
-    #     # print(f"update 1: {s6.updated_at}")
-    #     self.assertNotAlmostEqual(s6.created_at, s6.updated_at,
-    #                               delta=timedelta(microseconds=10))
-    #     s6.save()
-    #     # print(f"update 2: {s6.updated_at}")
-    #     self.assertNotAlmostEqual(s6.created_at, s6.updated_at,
-    #                               delta=timedelta(microseconds=1000))
+    def test_save(self):
+        """checks that the updated_at attribute is updated with save() """
+        s6 = State()
+        # print(f"created at: {s6.created_at}")
+        # print(f"update 0: {s6.updated_at}")
+        self.assertAlmostEqual(s6.created_at, s6.updated_at,
+                               delta=timedelta(seconds=1))
+        s6.save()
+        # print(f"update 1: {s6.updated_at}")
+        self.assertNotAlmostEqual(s6.created_at, s6.updated_at,
+                                  delta=timedelta(microseconds=10))
+        s6.save()
+        # print(f"update 2: {s6.updated_at}")
+        self.assertNotAlmostEqual(s6.created_at, s6.updated_at,
+                                  delta=timedelta(microseconds=1000))

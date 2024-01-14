@@ -9,6 +9,7 @@ import sys
 from datetime import timedelta
 from datetime import datetime
 
+
 class TestAmenity(unittest.TestCase):
     """ basic type-checking tests of attibutes in  the `Amenity` class"""
 
@@ -17,12 +18,12 @@ class TestAmenity(unittest.TestCase):
         am0a = Amenity()
         self.assertTrue(type(am0a.name), str)
 
-
     def test_subclass(self):
-           """checks inheritance of `Amenity` objects"""
-           am0 = Amenity()
-           self.assertIsInstance(am0,Amenity)
-           self.assertTrue(issubclass(type(am0),BaseModel))
+        """checks inheritance of `Amenity` objects"""
+        am0 = Amenity()
+        self.assertIsInstance(am0, Amenity)
+        self.assertTrue(issubclass(type(am0), BaseModel))
+
 
 class TestAmenityInstantiation(unittest.TestCase):
     """checks that the instantiation of `Amenity` objects
@@ -38,7 +39,6 @@ class TestAmenityInstantiation(unittest.TestCase):
         self.assertAlmostEqual(am1.created_at, am1.updated_at,
                                delta=timedelta(seconds=1))
         self.assertTrue(hasattr(am1, "name"))
-
 
     def test_init_custom_args(self):
         """instantiation test of it's own  arguments"""
@@ -61,15 +61,15 @@ class TestAmenityInstantiation(unittest.TestCase):
         self.assertIsInstance(am2.updated_at, datetime)
         self.assertEqual(am2.id, "56d43177-cc5f-4d6c-a0c1-e167f8c27337")
 
-
     def test_init_with_kwargs(self):
         """tests instantiation of object with direct kwargs"""
         am3 = Amenity(id="78393",
-                       created_at="2023-12-14T17:30:54.052298",
-                       updated_at="2024-01-02T11:03:54.062721")
+                      created_at="2023-12-14T17:30:54.052298",
+                      updated_at="2024-01-02T11:03:54.062721")
         self.assertEqual(type(am3.id), str)
         self.assertEqual(type(am3.created_at), datetime)
-        print(am3.__dict__)
+        # print(am3.__dict__)
+
 
 class TestAmenityMethods(unittest.TestCase):
     """ tests the methods of the `Amenity` classs"""
@@ -98,18 +98,18 @@ class TestAmenityMethods(unittest.TestCase):
         self.assertEqual(type(mod_dict_str['created_at']), str)
         self.assertEqual(type(mod_dict_str['updated_at']), str)
 
-    # def test_save(self):
-    #     """checks that the updated_at attribute is updated with save() """
-    #     am6 = Amenity()
-    #     # print(f"created at: {am6.created_at}")
-    #     # print(f"update 0: {am6.updated_at}")
-    #     self.assertAlmostEqual(am6.created_at, am6.updated_at,
-    #                            delta=timedelta(seconds=1))
-    #     am6.save()
-    #     # print(f"update 1: {am6.updated_at}")
-    #     self.assertNotAlmostEqual(am6.created_at, am6.updated_at,
-                                #   delta=timedelta(microseconds=10))
-        # am6.save()
-        # # print(f"update 2: {am6.updated_at}")
-        # self.assertNotAlmostEqual(am6.created_at, am6.updated_at,
-        #                           delta=timedelta(microseconds=1000))
+    def test_save(self):
+        """checks that the updated_at attribute is updated with save() """
+        am6 = Amenity()
+        # print(f"created at: {am6.created_at}")
+        # print(f"update 0: {am6.updated_at}")
+        self.assertAlmostEqual(am6.created_at, am6.updated_at,
+                               delta=timedelta(seconds=1))
+        am6.save()
+        # print(f"update 1: {am6.updated_at}")
+        self.assertNotAlmostEqual(am6.created_at, am6.updated_at,
+                                  delta=timedelta(microseconds=10))
+        am6.save()
+        # print(f"update 2: {am6.updated_at}")
+        self.assertNotAlmostEqual(am6.created_at, am6.updated_at,
+                                  delta=timedelta(microseconds=1000))
