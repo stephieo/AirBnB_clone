@@ -9,6 +9,7 @@ import sys
 from datetime import timedelta
 from datetime import datetime
 
+
 class TestUser(unittest.TestCase):
     """ basic type-checking tests of attibutes in  the `City` class"""
 
@@ -18,12 +19,12 @@ class TestUser(unittest.TestCase):
         self.assertTrue(type(c0a.name), str)
         self.assertTrue(type(c0a.state_id), str)
 
-
     def test_subclass(self):
-           """checks inheritance of `City` objects"""
-           c0 = City()
-           self.assertIsInstance(c0,City)
-           self.assertTrue(issubclass(type(c0),BaseModel))
+        """checks inheritance of `City` objects"""
+        c0 = City()
+        self.assertIsInstance(c0, City)
+        self.assertTrue(issubclass(type(c0), BaseModel))
+
 
 class TestUserInstantiation(unittest.TestCase):
     """checks that the instantiation of `City` objects
@@ -40,7 +41,6 @@ class TestUserInstantiation(unittest.TestCase):
                                delta=timedelta(seconds=1))
         self.assertTrue(hasattr(c1, "name"))
         self.assertTrue(hasattr(c1, "state_id"))
-
 
     def test_init_custom_args(self):
         """instantiation test of it's own  arguments"""
@@ -65,12 +65,11 @@ class TestUserInstantiation(unittest.TestCase):
         self.assertIsInstance(c2.updated_at, datetime)
         self.assertEqual(c2.id, "56d43177-cc5f-4d6c-a0c1-e167f8c27337")
 
-
     def test_init_with_kwargs(self):
         """tests instantiation of object with direct kwargs"""
         c3 = City(id="78393",
-                       created_at="2023-12-14T17:30:54.052298",
-                       updated_at="2024-01-02T11:03:54.062721")
+                  created_at="2023-12-14T17:30:54.052298",
+                  updated_at="2024-01-02T11:03:54.062721")
         self.assertEqual(type(c3.id), str)
         self.assertEqual(type(c3.created_at), datetime)
 
@@ -102,18 +101,18 @@ class TestUserMethods(unittest.TestCase):
         self.assertEqual(type(mod_dict_str['created_at']), str)
         self.assertEqual(type(mod_dict_str['updated_at']), str)
 
-    # def test_save(self):
-    #     """checks that the updated_at attribute is updated with save() """
-    #     c6 = City()
-    #     # print(f"created at: {c6.created_at}")
-    #     # print(f"update 0: {c6.updated_at}")
-    #     self.assertAlmostEqual(c6.created_at, c6.updated_at,
-    #                            delta=timedelta(seconds=1))
-    #     c6.save()
-    #     # print(f"update 1: {c6.updated_at}")
-    #     self.assertNotAlmostEqual(c6.created_at, c6.updated_at,
-    #                               delta=timedelta(microseconds=10))
-    #     c6.save()
-    #     # print(f"update 2: {c6.updated_at}")
-    #     self.assertNotAlmostEqual(c6.created_at, c6.updated_at,
-    #                               delta=timedelta(microseconds=1000))
+    def test_save(self):
+        """checks that the updated_at attribute is updated with save() """
+        c6 = City()
+        # print(f"created at: {c6.created_at}")
+        # print(f"update 0: {c6.updated_at}")
+        self.assertAlmostEqual(c6.created_at, c6.updated_at,
+                               delta=timedelta(seconds=1))
+        c6.save()
+        # print(f"update 1: {c6.updated_at}")
+        self.assertNotAlmostEqual(c6.created_at, c6.updated_at,
+                                  delta=timedelta(microseconds=10))
+        c6.save()
+        # print(f"update 2: {c6.updated_at}")
+        self.assertNotAlmostEqual(c6.created_at, c6.updated_at,
+                                  delta=timedelta(microseconds=1000))
