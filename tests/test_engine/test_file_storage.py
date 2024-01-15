@@ -58,14 +58,6 @@ class TestFileStorage_methods(unittest.TestCase):
         cls.st = State()
         cls.us = User()
 
-    @classmethod
-    def tearDownClass(cls) -> None:
-        """clear any file.json created"""
-        try:
-            os.remove("file.json")
-        except IOError:
-            pass
-
     def test_all_type(self):
         """checks that the correct object record is returned"""
         self.assertEqual(type(FileStorage().all()), dict)
