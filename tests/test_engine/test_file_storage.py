@@ -154,7 +154,7 @@ class TestFileStorage_methods(unittest.TestCase):
         self.assertIn(self.us.to_dict(), temp_file.values())
 
     def test_reload_with_no_args(self):
-        """tests reload withour args"""
+        """tests reload without args"""
         self.storage.reload()
         objs = FileStorage._FileStorage__objects
 
@@ -172,17 +172,17 @@ class TestFileStorage_methods(unittest.TestCase):
 
         f1 = BaseModel()
         self.assertIn(f1.__class__.__name__ + "." + f1.id,
-                      models.storage._FileStorage__objects)
+                      storage._FileStorage__objects)
         u1 = User()
         self.assertIn(u1.__class__.__name__ + "." + u1.id,
-                      models.storage._FileStorage__objects)
+                      storage._FileStorage__objects)
         a1 = Amenity()
         self.assertIn(a1.__class__.__name__ + "." + a1.id,
-                      models.storage.all().keys())
+                      storage.all().keys())
 
     def test_all(self):
         """checks that the correct object record is returned"""
-        all_objs = models.storage.all()
+        all_objs = storage.all()
         # print(all_objs)
         self.assertEqual(type(all_objs), dict)
 
@@ -191,7 +191,7 @@ class TestFileStorage_methods(unittest.TestCase):
         m2 = BaseModel()
         a2 = Amenity()
         u2 = User()
-        models.storage.save()
+        storage.save()
 
         with open("file.json", "r", encoding="utf-8") as file:
             recent_save = json.load(file)
@@ -202,20 +202,20 @@ class TestFileStorage_methods(unittest.TestCase):
         m3 = BaseModel()
         a3 = Amenity()
         u3 = User()
-        models.storage.save()
+        storage.save()
         self.assertIn(u3.__class__.__name__ + "." + u3.id,
-                      models.storage._FileStorage__objects)
+                      storage._FileStorage__objects)
         self.assertIn(m3.__class__.__name__ + "." + m3.id,
-                      models.storage._FileStorage__objects)
+                      storage._FileStorage__objects)
         self.assertIn(a3.__class__.__name__ + "." + a3.id,
-                      models.storage.all().keys())
-        models.storage.reload()
+                      storage.all().keys())
+        storage.reload()
         self.assertIn(u3.__class__.__name__ + "." + u3.id,
-                      models.storage._FileStorage__objects)
+                      storage._FileStorage__objects)
         self.assertIn(m3.__class__.__name__ + "." + m3.id,
-                      models.storage._FileStorage__objects)
+                      storage._FileStorage__objects)
         self.assertIn(a3.__class__.__name__ + "." + a3.id,
-                      models.storage.all().keys())
+                      storage.all().keys())
 
 
 if "__name__" == "__main__":
