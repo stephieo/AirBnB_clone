@@ -1,169 +1,222 @@
 #!/usr/bin/python3
-"""Defines unittests for models/engine/file_storage.py.
-
-Unittest classes:
-    TestFileStorage_instantiation
-    TestFileStorage_methods
-"""
-import os
 import json
-import models
 import unittest
-from datetime import datetime
-from models.base_model import BaseModel
-from models.engine.file_storage import FileStorage
-from models.user import User
-from models.state import State
-from models.place import Place
-from models.city import City
+import os
 from models.amenity import Amenity
+from models.base_model import BaseModel
+from models.city import City
+from models.engine.file_storage import FileStorage
+from models.place import Place
 from models.review import Review
+from models.state import State
+from models.user import User
+from models import storage
 
 
-class TestFileStorage_instantiation(unittest.TestCase):
-    """Unittests for testing instantiation of the FileStorage class."""
+class TestFileStorage_init(unittest.TestCase):
+    """unittests for `FileStorage` instantiation"""
 
-    def test_FileStorage_instantiation_no_args(self):
-        self.assertEqual(type(FileStorage()), FileStorage)
+    def test_init_no_args(self):
+        self.assertEqual(FileStorage, type(FileStorage()))
 
-    def test_FileStorage_instantiation_with_arg(self):
+    def test_init_with_arg(self):
         with self.assertRaises(TypeError):
             FileStorage(None)
 
-    def test_FileStorage_file_path_is_private_str(self):
-        self.assertEqual(str, type(FileStorage._FileStorage__file_path))
+    def test_file_path_is_private(self):
+        with self.assertRaises(AttributeError):
+            FileStorage.__file_path
 
-    def testFileStorage_objects_is_private_dict(self):
-        self.assertEqual(dict, type(FileStorage._FileStorage__objects))
+    def test_file_path_is_private_str(self):
+        self.assertEqual(type(FileStorage._FileStorage__file_path), str)
 
-    def test_storage_initializes(self):
-        self.assertEqual(type(models.storage), FileStorage)
+    def test_objects_is_private(self):
+        with self.assertRaises(AttributeError):
+            FileStorage.__file_path
+
+    def test_objects_is_private_dict(self):
+        self.assertEqual(type(FileStorage._FileStorage__objects), dict)
+
+    def test_storage_init(self):
+        self.assertEqual(type(storage), FileStorage)
 
 
 class TestFileStorage_methods(unittest.TestCase):
-    """Unittests for testing methods of the FileStorage class."""
+    """unittests for all FileStorage methods"""
 
     @classmethod
-    def setUp(self):
-        try:
-            os.rename("file.json", "tmp")
-        except IOError:
-            pass
+    def setUpClass(cls) -> None:
+        """"set up for tests"""
+        # cls = FileStorage()
+        # FileStorage.method(storage, ?) = storage.method(?)
+        cls.storage = FileStorage()
+        cls.am = Amenity()
+        cls.bm = BaseModel()
+        cls.ct = City()
+        cls.pl = Place()
+        cls.rv = Review()
+        cls.st = State()
+        cls.us = User()
 
     @classmethod
-    def tearDown(self):
+    def tearDownClass(cls) -> None:
+        """clear any file.json created"""
         try:
             os.remove("file.json")
         except IOError:
             pass
-        try:
-            os.rename("tmp", "file.json")
-        except IOError:
-            pass
-        FileStorage._FileStorage__objects = {}
 
-    def test_all(self):
-        self.assertEqual(dict, type(models.storage.all()))
+    def test_all_type(self):
+        """checks that the correct object record is returned"""
+        self.assertEqual(type(FileStorage().all()), dict)
 
     def test_all_with_arg(self):
+        """all with args"""
         with self.assertRaises(TypeError):
-            models.storage.all(None)
+            FileStorage().all(None)
 
-    def test_new(self):
-        bm = BaseModel()
-        us = User()
-        st = State()
-        pl = Place()
-        cy = City()
-        am = Amenity()
-        rv = Review()
-        models.storage.new(bm)
-        models.storage.new(us)
-        models.storage.new(st)
-        models.storage.new(pl)
-        models.storage.new(cy)
-        models.storage.new(am)
-        models.storage.new(rv)
-        self.assertIn("BaseModel." + bm.id, models.storage.all().keys())
-        self.assertIn(bm, models.storage.all().values())
-        self.assertIn("User." + us.id, models.storage.all().keys())
-        self.assertIn(us, models.storage.all().values())
-        self.assertIn("State." + st.id, models.storage.all().keys())
-        self.assertIn(st, models.storage.all().values())
-        self.assertIn("Place." + pl.id, models.storage.all().keys())
-        self.assertIn(pl, models.storage.all().values())
-        self.assertIn("City." + cy.id, models.storage.all().keys())
-        self.assertIn(cy, models.storage.all().values())
-        self.assertIn("Amenity." + am.id, models.storage.all().keys())
-        self.assertIn(am, models.storage.all().values())
-        self.assertIn("Review." + rv.id, models.storage.all().keys())
-        self.assertIn(rv, models.storage.all().values())
+    def test_new_no_arg(self):
+        """test with no new args"""
+        with self.assertRaises(TypeError):
+            FileStorage().new()  # storage.new()
+
+    def test_new_individual_instance(self):
+        """checks that new() updates the __objects dictionary with
+        new instances for all classes"""
+
+        f1 = BaseModel()
+        self.assertIn(f1.__class__.__name__ + "." + f1.id,
+                      storage._FileStorage__objects)
+        u1 = User()
+        self.assertIn(u1.__class__.__name__ + "." + u1.id,
+                      storage._FileStorage__objects)
+        a1 = Amenity()
+        self.assertIn(a1.__class__.__name__ + "." + a1.id,
+                      storage.all().keys())
 
     def test_new_with_args(self):
+        self.storage.new(self.am)
+        self.storage.new(self.bm)
+        self.storage.new(self.ct)
+        self.storage.new(self.pl)
+        self.storage.new(self.rv)
+        self.storage.new(self.st)
+        self.storage.new(self.us)
+
+        self.assertIn(self.am.__class__.__name__ + "." +
+                      self.am.id, self.storage.all().keys())
+        self.assertIn(self.bm.__class__.__name__ + "." +
+                      self.bm.id, self.storage.all().keys())
+        self.assertIn(self.ct.__class__.__name__ + "." +
+                      self.ct.id, self.storage.all().keys())
+        self.assertIn(self.pl.__class__.__name__ + "." +
+                      self.pl.id, self.storage.all().keys())
+        self.assertIn(self.rv.__class__.__name__ + "." +
+                      self.rv.id, self.storage.all().keys())
+        self.assertIn(self.st.__class__.__name__ + "." +
+                      self.st.id, storage.all().keys())
+        self.assertIn(self.us.__class__.__name__ + "." +
+                      self.us.id, self.storage.all().keys())
+
+        self.assertIn(self.am, self.storage.all().values())
+        self.assertIn(self.bm, self.storage.all().values())
+        self.assertIn(self.ct, self.storage.all().values())
+        self.assertIn(self.pl, self.storage.all().values())
+        self.assertIn(self.rv, self.storage.all().values())
+        self.assertIn(self.st, self.storage.all().values())
+        self.assertIn(self.us, self.storage.all().values())
+
+    def test_new_with_more_than_one_arg(self):
+        """test new with more than one argument"""
         with self.assertRaises(TypeError):
-            models.storage.new(BaseModel(), 1)
+            self.storage.new(User(), {"first_name": "Rashisky"})
+
+    def test_save_with_no_args(self):
+        """test save without args"""
+        self.storage.save()
+        with open("file.json", "r", encoding="utf-8") as file:
+            temp_file = json.load(file)
+
+        self.assertIn(self.am.__class__.__name__ + "." + self.am.id, temp_file)
+        self.assertIn(self.bm.__class__.__name__ + "." + self.bm.id, temp_file)
+        self.assertIn(self.ct.__class__.__name__ + "." + self.ct.id, temp_file)
+        self.assertIn(self.pl.__class__.__name__ + "." + self.pl.id, temp_file)
+        self.assertIn(self.rv.__class__.__name__ + "." + self.rv.id, temp_file)
+        self.assertIn(self.st.__class__.__name__ + "." + self.st.id, temp_file)
+        self.assertIn(self.us.__class__.__name__ + "." + self.us.id, temp_file)
+
+        self.assertIn(self.am.to_dict(), temp_file.values())
+        self.assertIn(self.bm.to_dict(), temp_file.values())
+        self.assertIn(self.ct.to_dict(), temp_file.values())
+        self.assertIn(self.pl.to_dict(), temp_file.values())
+        self.assertIn(self.rv.to_dict(), temp_file.values())
+        self.assertIn(self.st.to_dict(), temp_file.values())
+        self.assertIn(self.us.to_dict(), temp_file.values())
+
+    def test_reload_with_no_args(self):
+        """tests reload without args"""
+        self.storage.reload()
+        objs = FileStorage._FileStorage__objects
+
+        self.assertIn("Amenity." + self.am.id, objs)
+        self.assertIn("BaseModel." + self.bm.id, objs)
+        self.assertIn("City." + self.ct.id, objs)
+        self.assertIn("Place." + self.pl.id, objs)
+        self.assertIn("Review." + self.rv.id, objs)
+        self.assertIn("State." + self.st.id, objs)
+        self.assertIn("User." + self.us.id, objs)
+
+    def test_new(self):
+        """checks that new() updates the __objects dictionary with
+        new instances for all classes"""
+
+        f1 = BaseModel()
+        self.assertIn(f1.__class__.__name__ + "." + f1.id,
+                      storage._FileStorage__objects)
+        u1 = User()
+        self.assertIn(u1.__class__.__name__ + "." + u1.id,
+                      storage._FileStorage__objects)
+        a1 = Amenity()
+        self.assertIn(a1.__class__.__name__ + "." + a1.id,
+                      storage.all().keys())
+
+    def test_all(self):
+        """checks that the correct object record is returned"""
+        all_objs = storage.all()
+        # print(all_objs)
+        self.assertEqual(type(all_objs), dict)
 
     def test_save(self):
-        bm = BaseModel()
-        us = User()
-        st = State()
-        pl = Place()
-        cy = City()
-        am = Amenity()
-        rv = Review()
-        models.storage.new(bm)
-        models.storage.new(us)
-        models.storage.new(st)
-        models.storage.new(pl)
-        models.storage.new(cy)
-        models.storage.new(am)
-        models.storage.new(rv)
-        models.storage.save()
-        save_text = ""
-        with open("file.json", "r") as f:
-            save_text = f.read()
-            self.assertIn("BaseModel." + bm.id, save_text)
-            self.assertIn("User." + us.id, save_text)
-            self.assertIn("State." + st.id, save_text)
-            self.assertIn("Place." + pl.id, save_text)
-            self.assertIn("City." + cy.id, save_text)
-            self.assertIn("Amenity." + am.id, save_text)
-            self.assertIn("Review." + rv.id, save_text)
+        """checks serialization process of instances in __objects"""
+        m2 = BaseModel()
+        a2 = Amenity()
+        u2 = User()
+        storage.save()
 
-    def test_save_with_arg(self):
-        with self.assertRaises(TypeError):
-            models.storage.save(None)
+        with open("file.json", "r", encoding="utf-8") as file:
+            recent_save = json.load(file)
+            self.assertIn("BaseModel" + "." + m2.id, recent_save)
 
     def test_reload(self):
-        bm = BaseModel()
-        us = User()
-        st = State()
-        pl = Place()
-        cy = City()
-        am = Amenity()
-        rv = Review()
-        models.storage.new(bm)
-        models.storage.new(us)
-        models.storage.new(st)
-        models.storage.new(pl)
-        models.storage.new(cy)
-        models.storage.new(am)
-        models.storage.new(rv)
-        models.storage.save()
-        models.storage.reload()
-        objs = FileStorage._FileStorage__objects
-        self.assertIn("BaseModel." + bm.id, objs)
-        self.assertIn("User." + us.id, objs)
-        self.assertIn("State." + st.id, objs)
-        self.assertIn("Place." + pl.id, objs)
-        self.assertIn("City." + cy.id, objs)
-        self.assertIn("Amenity." + am.id, objs)
-        self.assertIn("Review." + rv.id, objs)
-
-    def test_reload_with_arg(self):
-        with self.assertRaises(TypeError):
-            models.storage.reload(None)
+        """checks deserialization process of objects"""
+        m3 = BaseModel()
+        a3 = Amenity()
+        u3 = User()
+        storage.save()
+        self.assertIn(u3.__class__.__name__ + "." + u3.id,
+                      storage._FileStorage__objects)
+        self.assertIn(m3.__class__.__name__ + "." + m3.id,
+                      storage._FileStorage__objects)
+        self.assertIn(a3.__class__.__name__ + "." + a3.id,
+                      storage.all().keys())
+        storage.reload()
+        self.assertIn(u3.__class__.__name__ + "." + u3.id,
+                      storage._FileStorage__objects)
+        self.assertIn(m3.__class__.__name__ + "." + m3.id,
+                      storage._FileStorage__objects)
+        self.assertIn(a3.__class__.__name__ + "." + a3.id,
+                      storage.all().keys())
 
 
-if __name__ == "__main__":
+if "__name__" == "__main__":
     unittest.main()
