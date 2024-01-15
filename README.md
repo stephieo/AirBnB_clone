@@ -34,7 +34,7 @@ You can simply start the interpreter by running the executable file `./console.p
 
 - `?` or `help`: list available `commands` in the `Console`. Also provides information about a `command`
 
-```text
+```python3
 Usage:  help
         ?
         help <cmd>
@@ -45,7 +45,7 @@ examples: help, ? create, help count
 
 - `all`: Prints all or a given class existing instance;
 
-```bash
+```python3
 Usage:  all
         all()
         all <class name>
@@ -73,7 +73,7 @@ examples: count Review, count() Amenity, User.count(), City.count
 
 - `create`: Creates an instance;
 
-```text
+```python3
 Usage:  create <class name>
         create <class name()>
         create() <class name>
@@ -86,7 +86,7 @@ examples: create State, Review.create(), create() City
 
 - `destroy`: Destroys an instance;
 
-```text
+```python3
 Usage:  destroy <class name> <id>
         destroy <class name()> <id>
         destroy() <class name> <id>
@@ -98,7 +98,7 @@ examples: destroy Amenity 1234-5678-efse, BaseModel.destroy(8343-sefe-2343)
 
 - `show`: Shows an instance;
 
-```text
+```python3
 Usage:  show <class name> <id>
         show() <class name()> <id>
         show <class name()> <id>
@@ -110,7 +110,7 @@ examples: show BaseModel, show() State, User.count(), Place.count
 
 - `update`: Update an existing instance;
 
-```text
+```python3
 Usage:  update <class name> <id> <attribute name> "<attribute value>"
         update <class name()> <id> <attribute name> "<attribute value>"
         update() <class name()> <id> <attribute name> "<attribute value>"
@@ -127,7 +127,7 @@ examples: update User 34343-2343-eser attribute_name "attribute_value",
 
 - `quit`: Quits the `Console`
 
-```text
+```python3
 Usage: quit
 ```
 
