@@ -26,8 +26,6 @@ button:hover{
     opacity: 90%;
 }
 
-
-
 .locations{
     float: left;
     height: 100%;
@@ -52,6 +50,23 @@ button:hover{
     margin-left: 30px;
 
 }
+
+
+.locations:hover .popover{
+    color: #000000;
+    display: list-item;
+    background-color: #FAFAFA;
+    border: 1px solid #DDDDDD;
+    border-radius: 4px;
+    list-style-type: none;
+    padding: 30px;
+}
+
+.locations:hover .popover ul{
+    list-style-type: none;
+
+}
+
 .amenities{
     float: left;
     height: 100%;
@@ -73,4 +88,15 @@ button:hover{
     font-size: 14px;
     margin-top: 0;
     margin-left: 30px;
+}
+
+.amenities:hover .popover{
+    background-color: #FAFAFA;
+    color: #000000;
+    border: 1px solid #DDDDDD;
+    border-radius: 4px;
+    list-style-type: none;
+    padding: 30px;
+    margin: 15px;
+
 }
