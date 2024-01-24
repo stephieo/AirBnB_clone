@@ -52,20 +52,8 @@ button:hover{
 }
 
 
-.locations:hover .popover{
-    color: #000000;
-    display: list-item;
-    background-color: #FAFAFA;
-    border: 1px solid #DDDDDD;
-    border-radius: 4px;
-    list-style-type: none;
-    padding: 30px;
-}
 
-.locations:hover .popover ul{
-    list-style-type: none;
 
-}
 
 .amenities{
     float: left;
@@ -90,7 +78,26 @@ button:hover{
     margin-left: 30px;
 }
 
+.popover{
+    display: none;
+}
+
+.locations:hover .popover{
+    color: #000000;
+    display: list-item;
+    background-color: #FAFAFA;
+    border: 1px solid #DDDDDD;
+    border-radius: 4px;
+    list-style-type: none;
+    padding: 30px;
+}
+
+.locations:hover .popover ul{
+    list-style-type: none;
+
+}
 .amenities:hover .popover{
+    display: list-item;
     background-color: #FAFAFA;
     color: #000000;
     border: 1px solid #DDDDDD;
